@@ -11,7 +11,7 @@ const config = {
     arcade:{
       debug: true,
       gravity:{
-        y: 0
+        y: 400
       }
     }
   },
@@ -28,47 +28,37 @@ function preload () {
   this.load.image('bird', 'assets/bird.png');
 }
 let bird = null;
-let totalDelta = 0;
-let VELOCITY = 200;
+const totalDelta = 0;
+const VELOCITY = 200;
+let INITIATE_BIRD_POSTION = {x: config.width/10, y:config.height/2};
 
 //Initialise Instances
 function create () {
-  //this.add.image(x, y, imageName);
-  //Here x,y is the center of the Image, 
-  //so, basically we are moving the center of the image.
-
-  //this.add.image(0, 0, 'sky'); 
-  //this.add.image(config.width/2, config.height/2, 'sky'); 
-  //this.add.image(0, 0, 'sky').setOrigin(0,0); 
-  //this.add.image(400, 300, 'sky').setOrigin(0.5,0.5); 
   this.add.image(0, 0, 'sky').setOrigin(0,0); 
-  bird = this.physics.add.sprite(config.width/10, config.height/2, 'bird').setOrigin(0,0);
-  bird.body.velocity.x = VELOCITY;
-  //bird.body.gravity.y = 200;
-  //console.log(bird.body);
-  //debugger
-  
+  bird = this.physics.add.sprite(
+    INITIATE_BIRD_POSTION.x, 
+    INITIATE_BIRD_POSTION.y, 'bird')
+    .setOrigin(0,0);
+  //bird.body.velocity.x  = VELOCITY;
+  //Working with events.
+  this.input.on('pointerdown', flap);
+  this.input.keyboard.on('keydown-SPACE', flap);
 }
 //60fps - default.
 //60 * 16 ~ 1000, here 16 is the delta time
 function update(time, delta){
-  totalDelta += delta;
-  if(totalDelta >= 1000){
-    /*
-    console.log('totalDelta', totalDelta);
-    console.log(bird.body.velocity.y);
-    console.log(bird.body.gravity.y);
-    totalDelta = 0;
-    */
-   //Assignment.
-   
-  }
-  if(bird.x >= config.width - bird.width){
-    bird.body.velocity.x = -VELOCITY;
-  }else if(bird.x <= 0){
-    bird.body.velocity.x = VELOCITY;
-  }
   //console.log(bird.body.x);
+  if(bird.y >=  config.height || bird.y < 0){
+    restartFromStartPosition();
+  }
 }
 
+function restartFromStartPosition(){
+  bird.x = INITIATE_BIRD_POSTION.x;
+  bird.y = INITIATE_BIRD_POSTION.y;
+  bird.body.velocity.y  = 0;
+}
+function flap(){
+  bird.body.velocity.y  = -VELOCITY;
+}
 new Phaser.Game(config);
