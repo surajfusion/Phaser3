@@ -11,7 +11,7 @@ const config = {
     arcade:{
       debug: true,
       gravity:{
-        y: 400
+        //y: 400
       }
     }
   },
@@ -21,16 +21,22 @@ const config = {
     update: update
   }
 };
+const VELOCITY = 200;
+const INITIATE_BIRD_POSTION = {x: config.width/10, y:config.height/2};
+const PIPE_DISTANCE_BETWEEN_RANGE = [100, 250];
+let pipeHorizontalDistance = 0;
+const PIPES_TO_RENDER = 4;
+
 //Loading Assets: EG- Images, Animation, Music.
 function preload () {
   //debugger
   this.load.image('sky', 'assets/sky.png');
   this.load.image('bird', 'assets/bird.png');
+  this.load.image('pipe', 'assets/pipe.png');
 }
 let bird = null;
-const totalDelta = 0;
-const VELOCITY = 200;
-let INITIATE_BIRD_POSTION = {x: config.width/10, y:config.height/2};
+let upperPipe = null;
+let lowerPipe = null;
 
 //Initialise Instances
 function create () {
@@ -39,13 +45,18 @@ function create () {
     INITIATE_BIRD_POSTION.x, 
     INITIATE_BIRD_POSTION.y, 'bird')
     .setOrigin(0,0);
-  //bird.body.velocity.x  = VELOCITY;
-  //Working with events.
+  bird.body.gravity.y = 400;
+
+  for(var i =0; i < PIPES_TO_RENDER; i++){
+    upperPipe = this.physics.add.sprite(0, 0, 'pipe').setOrigin(0,1);
+    lowerPipe = this.physics.add.sprite(0, 0, 'pipe').setOrigin(0, 0);
+    placePipes(upperPipe, lowerPipe);
+  }
+
   this.input.on('pointerdown', flap);
   this.input.keyboard.on('keydown-SPACE', flap);
 }
-//60fps - default.
-//60 * 16 ~ 1000, here 16 is the delta time
+
 function update(time, delta){
   //console.log(bird.body.x);
   if(bird.y >=  config.height || bird.y < 0){
@@ -58,7 +69,22 @@ function restartFromStartPosition(){
   bird.y = INITIATE_BIRD_POSTION.y;
   bird.body.velocity.y  = 0;
 }
+
 function flap(){
   bird.body.velocity.y  = -VELOCITY;
+}
+
+function placePipes(uPipe, lPipe){
+  pipeHorizontalDistance += 400;
+  let pipeVerticalDistance = Phaser.Math.Between(...PIPE_DISTANCE_BETWEEN_RANGE);
+  let pipeVerticalPostion = Phaser.Math.Between(0 + 30, config.height - 30 - pipeVerticalDistance);
+  
+  uPipe.x = pipeHorizontalDistance;
+  uPipe.y = pipeVerticalPostion;
+  lPipe.x = uPipe.x;
+  lPipe.y = uPipe.y + pipeVerticalDistance;
+
+  uPipe.body.velocity.x = -200;
+  lPipe.body.velocity.x = -200;
 }
 new Phaser.Game(config);
