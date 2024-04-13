@@ -24,13 +24,6 @@ class PlayScene extends Phaser.Scene{
         this.bestScore = this.add.text(16, 64, `Best Score: ${bestScoreText || 0}`, {fontSize: '18px', fill:'#000'});
     }
 
-    preload(){
-        this.load.image('sky', 'assets/sky.png');
-        this.load.image('bird', 'assets/bird.png');
-        this.load.image('pipe', 'assets/pipe.png');
-        this.load.image('pauseButton', 'assets/pause.png');
-    }
-
     create(){
         this.createBG();
         this.createPauseButton();
