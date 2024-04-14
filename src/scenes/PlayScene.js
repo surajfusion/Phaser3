@@ -71,6 +71,17 @@ class PlayScene extends BaseScene{
         this.createColloiders();
         this.handleInputs();
         this.listenToEvents();
+
+        this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('bird', {start:9, end:15}),
+            //24fps is default.
+            frameRate: 8,
+            //-1 =  infinite
+            repeat: -1
+        });
+
+        this.bird.play('fly');
     }
 
     createPauseButton(){
@@ -89,7 +100,11 @@ class PlayScene extends BaseScene{
     }
 
     createBird(){
-        this.bird = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'bird').setOrigin(0,0);
+        this.bird = this.physics.add.sprite(this.config.startPosition.x, this.config.startPosition.y, 'bird')
+        .setScale(3)
+        .setFlipX(true)
+        .setOrigin(0,0);
+        this.bird.setBodySize(this.bird.width, this.bird.height-8);
         this.bird.body.gravity.y = 400;
         this.bird.setCollideWorldBounds(true );
     }
@@ -167,14 +182,12 @@ class PlayScene extends BaseScene{
     increaseDifficulty(){
         if(this.score === 5){
             this.currectDifficulty = 'medium';
-        }
-
-        if(this.score === 15){
+        }else if(this.score === 15){
             this.currectDifficulty = 'hard';
-        }
-
-        if(this.score === 25){
+        }else if(this.score === 25){
             this.currectDifficulty = 'veryhard';
+        }else if(this.score < 5){
+            this.currectDifficulty = 'easy';
         }
     }
 

@@ -44,11 +44,12 @@ const config = {
   //webGL() JS API redering 2d & 3d graphics.
   type: Phaser.AUTO,
   ...SHARED_CONFIG, 
+  pixelArt: true,
   physics: {
     //Arcade physics - controll the gravity and vlocity.
     default: 'arcade',
     arcade:{
-      debug: true,
+      //debug: true,
       gravity:{
         //y: 400
       }
