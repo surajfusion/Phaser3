@@ -3,6 +3,7 @@ import Phaser, { Scene } from "phaser";
 import PlayScene from "./scenes/PlayScene";
 import MenuScene from "./scenes/MenuScene";
 import PreloadScene from "./scenes/PreloadScene";
+import ScoreScene from "./scenes/ScoreScene";
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -12,7 +13,7 @@ const VELOCITY = 200;
 //const INITIATE_BIRD_POSTION = {x: config.width/10, y:config.height/2};
 const PIPE_DISTANCE_BETWEEN_RANGE = [100, 250];
 const PIPES_HORI_DIST_BW_RANGE = [500, 600];
-const SCENES = [ PreloadScene, MenuScene, PlayScene];
+const SCENES = [ PreloadScene, MenuScene, PlayScene, ScoreScene];
 
 const SHARED_CONFIG = {
   width: WIDTH,
